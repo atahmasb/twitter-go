@@ -1,0 +1,17 @@
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the Go coverage tool
+*.out
+
+# Coverage artifacts
+cover-summary
+index.html
+
+
+.DS_Store
+
+# IDE related files
+.idea
+.vscode
+git
