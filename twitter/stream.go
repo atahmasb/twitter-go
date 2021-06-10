@@ -3,7 +3,6 @@ package twitter
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -108,6 +107,7 @@ func createStream(cfg Config, apiInfo APIInfo,
 		rawData:      make(chan []byte),
 		done:         make(chan struct{}),
 	}
+	s.waitGroup.Add(2)
 	go s.consume()
 	go s.processMessage()
 
@@ -116,12 +116,11 @@ func createStream(cfg Config, apiInfo APIInfo,
 }
 
 func (s *Stream) consume() {
-	s.waitGroup.Add(1)
-	defer close(s.MessageQueue)
+
 	defer close(s.rawData)
+
 	defer s.waitGroup.Done()
 	for !s.stopped() {
-
 		s.Error = nil
 		s.AttemptTime = time.Now()
 
@@ -210,18 +209,19 @@ func (s *Stream) receive(body io.Reader) {
 }
 
 func (s *Stream) processMessage() {
+	defer close(s.MessageQueue)
+	defer s.waitGroup.Done()
 	for !s.stopped() {
-		d, ok := <- s.rawData
-		fmt.Printf("data: %v", d)
+		messageBytes, ok := <-s.rawData
 		if !ok {
-			continue
+			return
 		}
-		message, err := s.getMessage(d)
+		message, err := s.getMessage(messageBytes)
 		if err != nil {
 			s.Retryable = Bool(false)
 			return
 		}
-		fmt.Printf("%v message", message)
+
 		select {
 		// send messages, data, or errors
 		case s.MessageQueue <- message:
