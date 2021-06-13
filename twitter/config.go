@@ -84,6 +84,20 @@ func (c *Config) WithRetryer(retryer RequestRetryer) *Config {
 }
 
 // NewDefaultLogger returns a Logger which will write log messages to stdout.
-func NewDefaultLogger() zerolog.Logger {
+func newDefaultLogger() zerolog.Logger {
 	return zerolog.New(os.Stderr).With().Timestamp().Logger()
+}
+
+func resolveConfig(cfg *Config) *Config {
+	if cfg.HTTPClient == nil {
+		cfg = cfg.WithHTTPClient(&http.Client{})
+	}
+	if cfg.Logger == nil {
+		cfg = cfg.WithLogger(newDefaultLogger())
+	}
+	if cfg.MaxRetries == 0 {
+		cfg = cfg.WithMaxRetries(maxDefaultRetries)
+	}
+
+	return cfg
 }
