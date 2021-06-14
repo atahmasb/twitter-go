@@ -21,6 +21,7 @@ type Client struct {
 
 // NewClient returns a new Twitter API client that uses default handlers and configs.
 func NewClient(cfg *Config) *Client {
+	cfg = resolveConfig(cfg)
 	client := &Client{
 		Config:  cfg,
 		APIInfo: newAPIInfo(),

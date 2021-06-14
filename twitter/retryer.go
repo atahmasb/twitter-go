@@ -4,6 +4,8 @@ import (
 	"time"
 )
 
+const maxDefaultRetries = 5
+
 // Retryer provides the interface for the client request retry behavior. The
 // Retryer implementation is responsible for implementing exponential backoff,
 // and determine if a request API error should be retried.

@@ -46,10 +46,15 @@ type ValidateRulesOutput struct {
 }
 
 // CreateRulesInput is used to create a set of rules
-type CreateRulesInput ValidateRulesInput
+type CreateRulesInput struct {
+	Add []Rule `json:"add,required"`
+}
 
 // CreateRulesOutput contains output of creating rules endpoint response
-type CreateRulesOutput ValidateRulesOutput
+type CreateRulesOutput struct {
+	Data []Rule                  `json:"data"`
+	Meta ValidateRulesOutputMeta `json:"meta"`
+}
 
 // RulesIDs contains a list of rule ids to be deleted
 type RulesIDs struct {
@@ -164,10 +169,6 @@ func (c *Client) DeleteRules(input *DeleteRulesInput) (req *Request, output *Del
 
 // GetRules retrives rules that have been applied to your stream
 func (c *Client) GetRules(input *GetRulesInput) (req *Request, output *GetRulesOutput) {
-	if input == nil {
-		input = &GetRulesInput{}
-	}
-
 	queryParams := make(map[string]string)
 	if len(input.IDs) > 0 {
 		queryParams["ids"] = strings.Join(input.IDs, ",")
