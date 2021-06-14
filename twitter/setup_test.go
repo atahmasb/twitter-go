@@ -36,7 +36,7 @@ func (suite *twitterClientSuite) SetupTest() {
 		})).
 		WithHTTPClient(httpClient).
 		WithLogLevel(int8(2)).
-		WithLogger(NewDefaultLogger()).
+		WithLogger(newDefaultLogger()).
 		WithRetryer(noRetryer{})
 
 	client := &Client{
