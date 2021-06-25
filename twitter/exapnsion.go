@@ -1,14 +1,6 @@
 package twitter
 
 
-// ExpansionField enables you to select which specific expansion 
-// fields will deliver in each returned Tweet.
-type Field string
-
-func (e Field) Stringify() string {
-	return string(e)
-}
-
 const (
 	// ExpansionAttachmentsPollIDs returns a poll object containing metadata for the poll included in the Tweet
 	ExpansionAttachmentsPollIDs Field = "attachments.poll_ids"

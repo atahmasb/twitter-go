@@ -72,7 +72,7 @@ func main() {
 
 	// Streams Tweets in real-time based on a specific set of filter rules
 	logger.Info().Msgf("Streaming real time tweets")
-	stream := client.StreamTweets(twitter.StreamTweetsInput{})
+	stream := client.StreamTweets(&twitter.StreamTweetsInput{})
 
 	// Stream tweets for 5 seconds and then call`Stop` to stop streaming
 	go func() {

@@ -2,7 +2,6 @@ package twitter
 
 import (
 	"encoding/json"
-	"reflect"
 	"strings"
 	"time"
 )
@@ -95,12 +94,7 @@ type GetRulesOutput struct {
 
 // StreamTweetsInput contains input query parameters to include in the request
 type StreamTweetsInput struct {
-	Expansions []Field
-	Media      []MediaField
-	Place      []PlaceField
-	Poll       []PollField
-	Tweet      []TweetField
-	User       []UserField
+	Fields QueryParamsFields
 }
 
 // StreamTweetsOutput contains streaming endpoint output
@@ -195,8 +189,8 @@ func (c *Client) GetRules(input *GetRulesInput) (req *Request, output *GetRulesO
 // You need to check if stream is established by checking `receiving` parameter of the
 // Stream struct. Streaming tweets can be accessed through the Queue on the return
 // stream struct
-func (c *Client) StreamTweets(input StreamTweetsInput) (s *Stream) {
-	queryParams := getQueryParamsFromStreamTweetsInput(&input)
+func (c *Client) StreamTweets(input *StreamTweetsInput) (s *Stream) {
+	queryParams := getQueryParamsFromTweetsInput(input.Fields)
 	endpoint := &EndPointInfo{
 		Name:        streamTweets,
 		HTTPMethod:  "GET",
@@ -207,50 +201,5 @@ func (c *Client) StreamTweets(input StreamTweetsInput) (s *Stream) {
 	output := &StreamTweetsOutput{}
 	s = c.NewStream(endpoint, nil, output)
 	return
-
-}
-
-func getQueryParamsFromStreamTweetsInput(input *StreamTweetsInput) map[string]string {
-	queryParams := make(map[string]string, 0)
-	fields := reflect.Indirect(reflect.ValueOf(input))
-	numberOfFields := fields.NumField()
-	for i := 0; i < numberOfFields; i++ {
-		fieldName := fields.Type().Field(i).Name
-		fieldValue := fields.Field(i).Interface()
-		fieldParams, ok := fieldValue.([]Field)
-		if !ok {
-			continue
-		}
-		if len(fieldParams) == 0 {
-			continue
-		}
-		switch fieldName {
-		case "Expansions":
-			queryParams["expansions"] = joinFieldParams(fieldParams)
-		case "Media":
-			queryParams["media.fields"] = joinFieldParams(fieldParams)
-		case "Place":
-			queryParams["place.fields"] = joinFieldParams(fieldParams)
-		case "Poll":
-			queryParams["poll.fields"] = joinFieldParams(fieldParams)
-		case "Tweet":
-			queryParams["tweet.fields"] = joinFieldParams(fieldParams)
-		case "User":
-			queryParams["user.fields"] = joinFieldParams(fieldParams)
-		default:
-			continue
-
-		}
-
-	}
-	return queryParams
-}
-
-func joinFieldParams(params []Field) string {
-	fieldsAll := make([]string, len(params), len(params))
-	for idx, field := range params {
-		fieldsAll[idx] = field.Stringify()
-	}
-	return strings.Join(fieldsAll, ",")
 
 }

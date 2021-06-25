@@ -4,21 +4,17 @@ import (
 	"time"
 )
 
-// PollField enables you to select which specific poll
-// fields will deliver in each returned Tweet.
-type PollField string
-
 const (
 	// PollFieldDurationMinutes specifies the total duration of this poll.
-	PollFieldDurationMinutes PollField = "duration_minutes"
+	PollFieldDurationMinutes Field = "duration_minutes"
 	// PollFieldEndDateTime specifies the end date and time for this poll.
-	PollFieldEndDateTime PollField = "end_datetime"
+	PollFieldEndDateTime Field = "end_datetime"
 	// PollFieldID is unique identifier of the expanded poll.
-	PollFieldID PollField = "id"
+	PollFieldID Field = "id"
 	// PollFieldOptions contains objects describing each choice in the referenced poll.
-	PollFieldOptions PollField = "options"
+	PollFieldOptions Field = "options"
 	// PollFieldVotingStatus indicates if this poll is still active and can receive votes, or if the voting is now closed.
-	PollFieldVotingStatus PollField = "voting_status"
+	PollFieldVotingStatus Field = "voting_status"
 )
 
 // Poll can be included in a Tweet is not a primary object on any endpoint,
