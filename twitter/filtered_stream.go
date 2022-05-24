@@ -96,11 +96,11 @@ type GetRulesOutput struct {
 // StreamTweetsInput contains input query parameters to include in the request
 type StreamTweetsInput struct {
 	Expansions []Field
-	Media      []MediaField
-	Place      []PlaceField
-	Poll       []PollField
-	Tweet      []TweetField
-	User       []UserField
+	Media      []Field
+	Place      []Field
+	Poll       []Field
+	Tweet      []Field
+	User       []Field
 }
 
 // StreamTweetsOutput contains streaming endpoint output
@@ -196,7 +196,7 @@ func (c *Client) GetRules(input *GetRulesInput) (req *Request, output *GetRulesO
 // Stream struct. Streaming tweets can be accessed through the Queue on the return
 // stream struct
 func (c *Client) StreamTweets(input StreamTweetsInput) (s *Stream) {
-	queryParams := getQueryParamsFromStreamTweetsInput(&input)
+	queryParams := getQueryParamsFromStreamTweetsInput(input)
 	endpoint := &EndPointInfo{
 		Name:        streamTweets,
 		HTTPMethod:  "GET",
@@ -210,9 +210,9 @@ func (c *Client) StreamTweets(input StreamTweetsInput) (s *Stream) {
 
 }
 
-func getQueryParamsFromStreamTweetsInput(input *StreamTweetsInput) map[string]string {
+func getQueryParamsFromStreamTweetsInput(input StreamTweetsInput) map[string]string {
 	queryParams := make(map[string]string, 0)
-	fields := reflect.Indirect(reflect.ValueOf(input))
+	fields := reflect.Indirect(reflect.ValueOf(&input))
 	numberOfFields := fields.NumField()
 	for i := 0; i < numberOfFields; i++ {
 		fieldName := fields.Type().Field(i).Name
@@ -224,6 +224,7 @@ func getQueryParamsFromStreamTweetsInput(input *StreamTweetsInput) map[string]st
 		if len(fieldParams) == 0 {
 			continue
 		}
+
 		switch fieldName {
 		case "Expansions":
 			queryParams["expansions"] = joinFieldParams(fieldParams)
