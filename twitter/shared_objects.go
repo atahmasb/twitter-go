@@ -32,5 +32,5 @@ type URL struct {
 // Withheld contains withholding details.
 type Withheld struct {
 	CopyRight   bool     `json:"copyright"`
-	ContryCodes []string `json:"country_codes"`
+	CountryCodes []string `json:"country_codes"`
 }

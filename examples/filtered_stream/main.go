@@ -87,7 +87,7 @@ func main() {
 		if !ok {
 			logger.Error().Msg("Failed to cast message to Tweet")
 		} else {
-			logger.Info().Msgf("tweet id: %s, tweet text: %s", streamOutput.Data.ID, streamOutput.Data.Text)
+			logger.Info().Msgf(streamOutput.Data.ID, streamOutput.Data.CreatedAt)
 		}
 
 	}
