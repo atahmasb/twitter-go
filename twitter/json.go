@@ -19,6 +19,4 @@ func UnmarshalJSON(v interface{}, stream io.Reader) error {
 	default:
 		return err
 	}
-
-	return nil
 }
