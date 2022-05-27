@@ -64,7 +64,6 @@ func (r *streamResponseBodyReader) readNext() ([]byte, error) {
 		}
 		// If the line ends with "\r\n", it's the end of one stream message data.
 		if bytes.HasSuffix(line, []byte("\r\n")) {
-			// fmt.Println(111)
 			// reader.ReadBytes() returns a slice including the delimiter itself, so
 			// we need to trim '\n' as well as '\r' from the end of the slice.
 			r.buf.Write(bytes.TrimRight(line, "\r\n"))

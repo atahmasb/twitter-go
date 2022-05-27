@@ -11,9 +11,12 @@ func UnmarshalJSON(v interface{}, stream io.Reader) error {
 	decoder := json.NewDecoder(stream)
 	decoder.UseNumber()
 	err := decoder.Decode(&v)
-	if err == io.EOF {
+	switch err {
+	case io.EOF:
 		return nil
-	} else if err != nil {
+	case io.ErrUnexpectedEOF:
+		return nil
+	default:
 		return err
 	}
 

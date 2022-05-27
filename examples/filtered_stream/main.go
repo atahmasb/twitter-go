@@ -1,6 +1,7 @@
 package main
 
 import (
+
 	"os"
 	"time"
 
@@ -87,7 +88,7 @@ func main() {
 		if !ok {
 			logger.Error().Msg("Failed to cast message to Tweet")
 		} else {
-			logger.Info().Msgf(streamOutput.Data.ID, streamOutput.Data.CreatedAt)
+			logger.Info().Msgf("Tweet ID: %s, text: %s", streamOutput.Data.ID, streamOutput.Data.Text)
 		}
 
 	}
