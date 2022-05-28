@@ -174,6 +174,7 @@ func (s *Stream) stopped() bool {
 // blocks until done.
 func (s *Stream) Stop() {
 	close(s.done)
+	close(s.MessageQueue)
 	// Scanner does not have a Stop() or take a done channel, so for low volume
 	// streams Scan() blocks until the next keep-alive. Close the resp.Body to
 	// escape and stop the stream in a timely fashion.
