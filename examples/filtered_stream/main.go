@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"os"
 	"time"
 
@@ -12,7 +11,7 @@ import (
 
 func main() {
 	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
-	cred := twitter.NewCredentials(twitter.Value{BearerToken: os.Getenv("BEARER_TOKEN")})
+	cred := twitter.NewCredentials(twitter.Value{BearerToken: os.Getenv("TWITTER_TOKEN")})
 	cfg := twitter.NewConfig().WithCredentials(cred)
 	client := twitter.NewClient(cfg)
 
