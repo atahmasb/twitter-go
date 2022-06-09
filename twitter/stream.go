@@ -190,7 +190,7 @@ func (s *Stream) receive(body io.Reader) {
 		data, err := reader.readNext()
 		if err != nil {
 			message := "failed to read next tweet from streaming response body"
-			s.Config.Logger.Err(err).Msg(message)
+			s.Config.Logger.Error().Err(err).Msg(message)
 			return
 		}
 		if len(data) == 0 {
@@ -221,7 +221,7 @@ func (s *Stream) processMessage() {
 		message, err := s.getMessage(messageBytes)
 		if err != nil {
 			message := "Failed to get message from raw data"
-			s.Config.Logger.Err(err).Msg(message)
+			s.Config.Logger.Error().Err(err).Msg(message)
 			s.Retryable = Bool(false)
 			return
 		}
@@ -244,7 +244,7 @@ func (s *Stream) getMessage(messageBytes []byte) (interface{}, error) {
 	err := UnmarshalJSON(s.Data, reader)
 	if err != nil {
 		message := "Failed to unmarshal bytes in json"
-		s.Config.Logger.Err(err).Msg(message)
+		s.Config.Logger.Error().Err(err).Msg(message)
 		return nil, err
 	}
 	return s.Data, nil
